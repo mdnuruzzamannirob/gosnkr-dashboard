@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Roboto } from 'next/font/google'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 const roboto = Roboto({ subsets: ['latin'], variable: '--font-sans' })
@@ -38,7 +39,10 @@ export default function RootLayout({
         roboto.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body suppressHydrationWarning className="min-h-full flex flex-col">
+        {children}
+        <Toaster richColors position="top-center" />
+      </body>
     </html>
   )
 }
