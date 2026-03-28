@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -13,6 +14,8 @@ import { type LoginFormValues, loginSchema } from '@/lib/schemas/auth'
 import { setZodFieldErrors } from '@/lib/utils/zod-errors'
 
 const LoginPage = () => {
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -38,6 +41,7 @@ const LoginPage = () => {
     try {
       const response = await authenticateWithPassword(parsedValues.data)
       toast.success(response.message)
+      router.push(AUTH_ROUTES.dashboard)
     } catch {
       toast.error('Unable to sign in right now. Please try again.')
     }
