@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
 import {
   Table,
   TableBody,
@@ -79,6 +80,10 @@ export default function StoresPage() {
   const [tab, setTab] = useState<'Customers' | 'Stores' | 'Resellers'>(
     'Customers',
   )
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const [selectedRow, setSelectedRow] = useState<
+    (typeof storeData)[number] | null
+  >(null)
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -105,35 +110,67 @@ export default function StoresPage() {
               Overview of customers and storefronts
             </p>
           </div>
+
           <div className="flex items-center gap-2">
-            <Button variant="secondary" className="text-foreground">
-              Export CSV
-            </Button>
+            <Button variant={'outline'}>Export CSV</Button>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-background/70 p-2">
-          {['Customers', 'Stores', 'Resellers'].map((item) => (
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center gap-6">
             <button
-              key={item}
               type="button"
-              onClick={() => setTab(item as typeof tab)}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-                tab === item
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:bg-muted/20'
+              onClick={() => setTab('Customers')}
+              className={`text-sm font-medium pb-2 ${
+                tab === 'Customers'
+                  ? 'text-foreground border-b-2 border-primary'
+                  : 'text-muted-foreground'
               }`}
             >
-              {item}
+              Customers
+              <span className="ml-2 inline-flex items-center rounded-full bg-muted/10 px-2 py-0.5 text-xs text-muted-foreground">
+                12,847
+              </span>
             </button>
-          ))}
-          <div className="ml-auto flex items-center gap-2">
-            <Search className="size-4 text-muted-foreground" />
+
+            <button
+              type="button"
+              onClick={() => setTab('Stores')}
+              className={`text-sm font-medium pb-2 ${
+                tab === 'Stores'
+                  ? 'text-foreground border-b-2 border-primary'
+                  : 'text-muted-foreground'
+              }`}
+            >
+              Stores
+              <span className="ml-2 inline-flex items-center rounded-full bg-muted/10 px-2 py-0.5 text-xs text-muted-foreground">
+                284
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setTab('Resellers')}
+              className={`text-sm font-medium pb-2 ${
+                tab === 'Resellers'
+                  ? 'text-foreground border-b-2 border-primary'
+                  : 'text-muted-foreground'
+              }`}
+            >
+              Resellers
+              <span className="ml-2 inline-flex items-center rounded-full bg-muted/10 px-2 py-0.5 text-xs text-muted-foreground">
+                91
+              </span>
+            </button>
+          </div>
+
+          <div className="ml-auto relative flex items-center gap-3 w-full max-w-lg">
+            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, email, ID..."
-              className="h-9 w-full min-w-45 bg-white"
+              className="h-9 pl-9 w-full bg-white"
             />
           </div>
         </div>
@@ -151,6 +188,7 @@ export default function StoresPage() {
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
+
             <TableBody>
               {filtered.map((row) => (
                 <TableRow key={row.id} className="hover:bg-muted/10">
@@ -159,6 +197,7 @@ export default function StoresPage() {
                       {row.avatar}
                     </div>
                   </TableCell>
+
                   <TableCell>
                     <div>
                       <p className="text-sm font-medium text-foreground">
@@ -169,9 +208,11 @@ export default function StoresPage() {
                       </p>
                     </div>
                   </TableCell>
+
                   <TableCell>{row.email}</TableCell>
                   <TableCell>{row.joined}</TableCell>
                   <TableCell>{row.orders}</TableCell>
+
                   <TableCell>
                     <Badge
                       className={`rounded-full px-2 py-1 text-xs font-semibold ${statusBadge[row.status as keyof typeof statusBadge]}`}
@@ -179,8 +220,17 @@ export default function StoresPage() {
                       {row.status}
                     </Badge>
                   </TableCell>
+
                   <TableCell>
-                    <Button variant="ghost" size="sm" className="text-primary">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-primary"
+                      onClick={() => {
+                        setSelectedRow(row)
+                        setIsSheetOpen(true)
+                      }}
+                    >
                       View
                     </Button>
                   </TableCell>
@@ -195,6 +245,64 @@ export default function StoresPage() {
             No {tab.toLowerCase()} found.
           </div>
         )}
+
+        <Sheet open={isSheetOpen} onOpenChange={(open) => setIsSheetOpen(open)}>
+          <SheetContent side="right" className="w-full max-w-sm">
+            <div className="p-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {selectedRow?.name ?? 'User details'}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedRow?.handle}
+                  </p>
+                </div>
+              </div>
+
+              {selectedRow && (
+                <div className="mt-6 flex flex-col items-center gap-4">
+                  <div className="h-20 w-20 flex items-center justify-center rounded-full bg-primary/10 text-primary text-xl font-semibold">
+                    {selectedRow.avatar}
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-foreground">
+                      {selectedRow.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {selectedRow.handle}
+                    </p>
+                  </div>
+
+                  <div className="w-full mt-4 space-y-3 px-2">
+                    <Button className="w-full rounded-lg border border-amber-200 bg-amber-50 text-amber-700">
+                      Warn User
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-lg border border-rose-200 text-rose-600"
+                    >
+                      Suspend Account
+                    </Button>
+
+                    <Button className="w-full rounded-lg bg-rose-500 text-white">
+                      Ban Account
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      className="w-full rounded-lg border border-border text-muted-foreground"
+                    >
+                      Send Notification
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </section>
     </div>
   )
