@@ -38,6 +38,7 @@ export default function RootLayout({
         'font-sans',
         roboto.variable,
       )}
+      data-scroll-behavior="smooth"
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         {children}
