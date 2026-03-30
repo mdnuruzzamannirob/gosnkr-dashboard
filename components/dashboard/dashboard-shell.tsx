@@ -92,12 +92,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-background lg:grid lg:grid-cols-[14.5rem_minmax(0,1fr)]">
+    <div className="min-h-dvh bg-background lg:grid lg:grid-cols-[14.5rem_minmax(0,1fr)]">
       <aside className="sticky top-0 hidden h-screen border-r border-white/10 bg-neutral-950 px-4 py-4 text-white lg:flex lg:flex-col">
         <div className="flex h-full flex-col rounded-2xl bg-neutral-950 px-1 py-1">
           <div className="flex items-center gap-2 px-3 pb-4 pt-2">
             <p className="text-[15px] font-semibold tracking-tight text-white">
-              GoSNKR
+              GOSNKR
             </p>
             <span
               className="size-1.5 rounded-full bg-emerald-400"
@@ -110,20 +110,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="mt-auto px-1 pt-4">
-            <div className="flex items-center gap-2 px-2 py-2">
-              <Avatar size="sm">
-                <AvatarFallback className="bg-white/10 text-white">
-                  SA
-                </AvatarFallback>
-              </Avatar>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-white">Super Admin</p>
-                <p className="truncate text-xs text-white/50">
-                  admin@gosnkr.com
-                </p>
-              </div>
-            </div>
-
             <Button
               variant="ghost"
               className="mt-1 w-full justify-start gap-3 rounded-lg px-3 text-white/70 hover:bg-white/10 hover:text-white"
@@ -136,8 +122,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-col">
-        <header className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur">
-          <div className="flex h-14 items-center gap-3 px-4 sm:px-6 lg:h-15 lg:px-8">
+        <header className="sticky top-0 z-30 border-b border-border/60 text-foreground bg-background backdrop-blur">
+          <div className="flex h-14 items-center px-4 sm:px-6 lg:px-8">
             <Button
               type="button"
               variant="outline"
@@ -145,30 +131,23 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               className="lg:hidden"
               onClick={() => setMobileOpen(true)}
             >
-              <Menu className="size-4" />
+              <Menu className="size-4 " />
             </Button>
 
-            <div className="hidden items-center gap-3 lg:flex">
-              <h2 className="text-[14px] font-semibold tracking-tight text-foreground">
+            <div className="hidden lg:flex items-center gap-3">
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">
                 Dashboard
               </h2>
-              <div className="hidden h-4 w-px bg-border md:block" />
             </div>
 
-            <div className="hidden flex-1 lg:block">
-              <div className="relative max-w-xl">
+            <div className="ml-auto flex items-center gap-3">
+              <div className="hidden sm:block relative">
                 <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder="Search users, stores, orders..."
-                  className="h-9 rounded-full border-border bg-background pl-9 text-sm"
+                  className="px-9 text-sm w-80"
                 />
               </div>
-            </div>
-
-            <div className="ml-auto flex items-center gap-2 sm:gap-3">
-              <Button variant="outline" className="hidden sm:inline-flex">
-                Export Report
-              </Button>
 
               <Button
                 variant="outline"
@@ -176,36 +155,23 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 className="relative rounded-full"
               >
                 <Bell className="size-4" />
-                <span className="absolute top-2 right-2 size-2 rounded-full bg-destructive" />
+                <span className="absolute top-0 right-0 size-2 rounded-full bg-destructive" />
               </Button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <div
-                    role="button"
-                    className="flex items-center gap-2 rounded-full border border-border bg-background px-2 py-1 pr-2"
-                  >
-                    <Avatar size="sm">
-                      <AvatarFallback className="bg-primary/10 text-primary">
-                        SA
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="hidden sm:block">
-                      <p className="text-sm font-medium leading-4 text-foreground">
-                        Super Admin
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        admin@gosnkr.com
-                      </p>
-                    </div>
-                  </div>
+                  <Avatar>
+                    <AvatarFallback className="bg-primary/5 text-primary">
+                      SA
+                    </AvatarFallback>
+                  </Avatar>
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-3 py-3">
+                <DropdownMenuContent align="end" className="w-56 mt-1">
+                  <div className="p-3">
                     <div className="flex items-center gap-3">
                       <Avatar size="lg">
-                        <AvatarFallback className="bg-white/10 text-white">
+                        <AvatarFallback className="bg-primary/5 text-primary">
                           SA
                         </AvatarFallback>
                       </Avatar>
@@ -255,20 +221,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           <SheetHeader className="border-b border-white/10 px-5 py-5">
             <SheetTitle className="flex items-center gap-2 text-white">
               <span className="text-[15px] font-semibold tracking-tight">
-                GoSNKR
+                GOSNKR
               </span>
-              <span
-                className="size-1.5 rounded-full bg-emerald-400"
-                aria-hidden
-              />
+              <span className="size-1.5 rounded-full bg-primary" aria-hidden />
             </SheetTitle>
           </SheetHeader>
 
           <div className="flex h-full flex-col gap-6 px-4 py-5">
             <DashboardNavList onNavigate={() => setMobileOpen(false)} />
-            <div className="mt-auto rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
-              Use the navigation to jump between dashboard sections.
-            </div>
           </div>
         </SheetContent>
       </Sheet>
