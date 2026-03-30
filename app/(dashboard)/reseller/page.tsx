@@ -146,7 +146,7 @@ export default function ResellerPage() {
 
         <div className="mt-6">
           <Card className="overflow-x-auto p-0">
-            <Table className="min-w-[720px]">
+            <Table className="min-w-180">
               <TableHeader>
                 <tr>
                   <TableHead>Avatar</TableHead>
