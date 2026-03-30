@@ -56,7 +56,7 @@ const metricCards: MetricCard[] = [
     delta: '+12.4% vs last month',
     icon: CircleDollarSign,
     bars: [28, 40, 35, 52, 44, 66, 60],
-    accent: 'text-emerald-600',
+    accent: 'text-primary',
   },
   {
     title: 'Active Users',
@@ -214,12 +214,12 @@ function MetricCardItem({ card }: { card: MetricCard }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm text-emerald-600">{card.delta}</p>
+        <p className="text-sm text-primary">{card.delta}</p>
         <div className="grid h-12 grid-cols-7 items-end gap-1">
           {card.bars.map((height, index) => (
             <span
               key={`${card.title}-${index}`}
-              className="rounded-full bg-primary/20"
+              className="rounded-md bg-primary"
               style={{ height: `${height}%` }}
             />
           ))}
@@ -244,18 +244,13 @@ export default function DashboardPage() {
     <div className="space-y-6 scroll-smooth">
       <section id="overview" className="space-y-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
-            <Badge className="w-fit border-primary/20 bg-primary/10 text-primary hover:bg-primary/10">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               Dashboard
-            </Badge>
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                Dashboard
-              </h1>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                Tuesday, March 24, 2026
-              </p>
-            </div>
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+              Tuesday, March 24, 2026
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">

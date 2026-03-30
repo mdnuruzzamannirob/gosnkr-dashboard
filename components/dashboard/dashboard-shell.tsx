@@ -99,10 +99,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <p className="text-[15px] font-semibold tracking-tight text-white">
               GOSNKR
             </p>
-            <span
-              className="size-1.5 rounded-full bg-emerald-400"
-              aria-hidden
-            />
+            <span className="size-1.5 rounded-full bg-primary" aria-hidden />
           </div>
 
           <nav className="space-y-1 px-1">
