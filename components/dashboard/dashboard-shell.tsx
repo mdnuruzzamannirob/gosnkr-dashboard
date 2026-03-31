@@ -9,7 +9,6 @@ import {
   Menu,
   PackageCheck,
   Search,
-  Settings2,
   ShieldAlert,
   Store,
   Users,
@@ -54,7 +53,6 @@ const navItems: NavItem[] = [
   { href: '/disputes', label: 'Disputes', icon: Flag },
   { href: '/drops', label: 'Drop Management', icon: PackageCheck },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/settings', label: 'Platform Settings', icon: Settings2 },
 ]
 
 function DashboardNavList({ onNavigate }: { onNavigate?: () => void }) {
@@ -187,7 +185,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
                   <DropdownMenuItem
                     onSelect={() => {
-                      router.push('/dashboard/profile')
+                      router.push('/profile')
                     }}
                   >
                     Profile
