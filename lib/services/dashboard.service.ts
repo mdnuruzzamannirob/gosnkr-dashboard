@@ -3,7 +3,12 @@
  * Currently using mock data, ready for real API integration
  */
 
-import type { MetricCard } from '@/types'
+interface MetricCard {
+  title: string
+  value: string
+  change: string
+  trend: 'up' | 'down'
+}
 
 const mockMetrics: MetricCard[] = [
   {

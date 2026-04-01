@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Performance optimization utilities
  */
@@ -9,9 +10,9 @@ import { useEffect, useRef } from 'react'
  */
 export function useDeepCompareEffect(
   callback: React.EffectCallback,
-  dependencies: React.DependencyList
+  dependencies: React.DependencyList,
 ) {
-  const currentDependenciesRef = useRef<React.DependencyList>()
+  const currentDependenciesRef = useRef<React.DependencyList>(null)
 
   if (!areDeepEqual(currentDependenciesRef.current, dependencies)) {
     currentDependenciesRef.current = dependencies
@@ -45,7 +46,7 @@ function areDeepEqual(a: any, b: any): boolean {
  */
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null
 
@@ -67,7 +68,7 @@ export function debounce<T extends (...args: any[]) => any>(
  */
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
-  limit: number
+  limit: number,
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean = false
 

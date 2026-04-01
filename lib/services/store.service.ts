@@ -4,7 +4,16 @@
  */
 
 // import { apiClient } from '@/lib/api-client'
-import type { Store } from '@/types/approvals'
+
+type StoreStatus = 'Pending' | 'Under Review' | 'Approved' | 'Rejected'
+
+interface Store {
+  id: string
+  name: string
+  location: string
+  status: StoreStatus
+  submitted: string
+}
 
 // Mock data - will be replaced with real API calls
 const mockStores: Store[] = [

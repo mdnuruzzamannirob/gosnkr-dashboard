@@ -1,40 +1,9 @@
 /**
  * Central type definitions for the application
+ *
+ * Note: Component-specific types are defined locally in components
+ * where they are used. This file can be expanded as shared types emerge.
  */
 
-export * from './approvals'
-
-export interface NavItem {
-  href: string
-  label: string
-  icon: React.ComponentType<{ className?: string }>
-}
-
-export interface MetricCard {
-  title: string
-  value: string
-  change: string
-  trend: 'up' | 'down'
-}
-
-// API Response Types for easy future integration
-export interface ApiListResponse<T> {
-  items: T[]
-  total: number
-  page: number
-  pageSize: number
-}
-
-export interface ApiPaginationParams {
-  page?: number
-  pageSize?: number
-  search?: string
-  filters?: Record<string, unknown>
-}
-
-// Common error type
-export interface ApiErrorResponse {
-  message: string
-  code?: string
-  details?: Record<string, unknown>
-}
+// Placeholder for future shared types
+// Currently, types are defined close to where they're used for better maintainability
