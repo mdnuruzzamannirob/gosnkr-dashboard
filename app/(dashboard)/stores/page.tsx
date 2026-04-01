@@ -1,12 +1,13 @@
 'use client'
 
-import { Search } from 'lucide-react'
+import { Download, Search, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
-import { Badge } from '@/components/ui/badge'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader } from '@/components/ui/sheet'
+import { StatusBadge } from '@/components/ui/status-badge'
 import {
   Table,
   TableBody,
@@ -15,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const storeData = [
   {
@@ -25,7 +27,7 @@ const storeData = [
     email: 'sarah.j@email.com',
     joined: 'Jan 15, 2024',
     orders: 12,
-    status: 'Active',
+    status: 'active' as const,
   },
   {
     id: 2,
@@ -35,7 +37,7 @@ const storeData = [
     email: 'mike.c@email.com',
     joined: 'Feb 20, 2024',
     orders: 8,
-    status: 'Active',
+    status: 'active' as const,
   },
   {
     id: 3,
@@ -45,7 +47,7 @@ const storeData = [
     email: 'emily.d@email.com',
     joined: 'Mar 5, 2024',
     orders: 5,
-    status: 'Warned',
+    status: 'warned' as const,
   },
   {
     id: 4,
@@ -55,7 +57,7 @@ const storeData = [
     email: 'james.w@email.com',
     joined: 'Dec 10, 2023',
     orders: 24,
-    status: 'Active',
+    status: 'active' as const,
   },
   {
     id: 5,
@@ -65,14 +67,14 @@ const storeData = [
     email: 'lisa.m@email.com',
     joined: 'Jan 28, 2024',
     orders: 15,
-    status: 'Active',
+    status: 'active' as const,
   },
 ]
 
-const statusBadge = {
-  Active: 'bg-emerald-100 text-emerald-700',
-  Warned: 'bg-amber-100 text-amber-700',
-  Inactive: 'bg-muted/20 text-muted-foreground',
+const tabCounts = {
+  Customers: 12847,
+  Stores: 284,
+  Resellers: 91,
 }
 
 export default function StoresPage() {
@@ -112,195 +114,351 @@ export default function StoresPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant={'outline'}>Export CSV</Button>
+            <Button variant="outline" size="sm" className="gap-2">
+              <Download className="size-4" />
+              Export CSV
+            </Button>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-6">
-            <button
-              type="button"
-              onClick={() => setTab('Customers')}
-              className={`text-sm font-medium pb-2 ${
-                tab === 'Customers'
-                  ? 'text-foreground border-b-2 border-primary'
-                  : 'text-muted-foreground'
-              }`}
-            >
-              Customers
-              <span className="ml-2 inline-flex items-center rounded-full bg-muted/10 px-2 py-0.5 text-xs text-muted-foreground">
-                12,847
-              </span>
-            </button>
+        <Tabs
+          defaultValue="Customers"
+          onValueChange={(value) =>
+            setTab(value as 'Customers' | 'Stores' | 'Resellers')
+          }
+          className="space-y-4"
+        >
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <TabsList>
+              <TabsTrigger value="Customers" count={tabCounts.Customers}>
+                Customers
+              </TabsTrigger>
+              <TabsTrigger value="Stores" count={tabCounts.Stores}>
+                Stores
+              </TabsTrigger>
+              <TabsTrigger value="Resellers" count={tabCounts.Resellers}>
+                Resellers
+              </TabsTrigger>
+            </TabsList>
 
-            <button
-              type="button"
-              onClick={() => setTab('Stores')}
-              className={`text-sm font-medium pb-2 ${
-                tab === 'Stores'
-                  ? 'text-foreground border-b-2 border-primary'
-                  : 'text-muted-foreground'
-              }`}
-            >
-              Stores
-              <span className="ml-2 inline-flex items-center rounded-full bg-muted/10 px-2 py-0.5 text-xs text-muted-foreground">
-                284
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setTab('Resellers')}
-              className={`text-sm font-medium pb-2 ${
-                tab === 'Resellers'
-                  ? 'text-foreground border-b-2 border-primary'
-                  : 'text-muted-foreground'
-              }`}
-            >
-              Resellers
-              <span className="ml-2 inline-flex items-center rounded-full bg-muted/10 px-2 py-0.5 text-xs text-muted-foreground">
-                91
-              </span>
-            </button>
+            <div className="relative flex w-full max-w-lg items-center gap-2 md:ml-auto md:w-auto">
+              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search users, stores, orders..."
+                className="h-9 pl-9 w-full"
+              />
+            </div>
           </div>
 
-          <div className="ml-auto relative flex items-center gap-3 w-full max-w-lg">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, email, ID..."
-              className="h-9 pl-9 w-full bg-white"
-            />
-          </div>
-        </div>
+          <TabsContent value="Customers" className="space-y-4">
+            <div className="rounded-lg border border-border bg-background/80 overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12"></TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Join Date</TableHead>
+                    <TableHead className="text-right">Orders</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
 
-        <div className="overflow-hidden rounded-2xl border border-border bg-background/80">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Avatar</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Join Date</TableHead>
-                <TableHead>Orders</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+                <TableBody>
+                  {filtered.map((row) => (
+                    <TableRow key={row.id} className="hover:bg-muted/10">
+                      <TableCell>
+                        <Avatar className="size-8">
+                          <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                            {row.avatar}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TableCell>
 
-            <TableBody>
-              {filtered.map((row) => (
-                <TableRow key={row.id} className="hover:bg-muted/10">
-                  <TableCell>
-                    <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      {row.avatar}
-                    </div>
-                  </TableCell>
+                      <TableCell>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {row.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {row.handle}
+                          </p>
+                        </div>
+                      </TableCell>
 
-                  <TableCell>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">
-                        {row.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {row.handle}
-                      </p>
-                    </div>
-                  </TableCell>
+                      <TableCell className="text-sm text-foreground">
+                        {row.email}
+                      </TableCell>
+                      <TableCell className="text-sm text-foreground">
+                        {row.joined}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className="text-sm font-medium text-foreground">
+                          {row.orders}
+                        </span>
+                      </TableCell>
 
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.joined}</TableCell>
-                  <TableCell>{row.orders}</TableCell>
+                      <TableCell>
+                        <StatusBadge status={row.status} />
+                      </TableCell>
 
-                  <TableCell>
-                    <Badge
-                      className={`rounded-full px-2 py-1 text-xs font-semibold ${statusBadge[row.status as keyof typeof statusBadge]}`}
-                    >
-                      {row.status}
-                    </Badge>
-                  </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-primary hover:bg-primary/10"
+                          onClick={() => {
+                            setSelectedRow(row)
+                            setIsSheetOpen(true)
+                          }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
 
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-primary"
-                      onClick={() => {
-                        setSelectedRow(row)
-                        setIsSheetOpen(true)
-                      }}
-                    >
-                      View
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            {filtered.length === 0 && (
+              <div className="rounded-lg border border-border bg-muted/10 p-8 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No customers found matching your search.
+                </p>
+              </div>
+            )}
+          </TabsContent>
 
-        {filtered.length === 0 && (
-          <div className="rounded-xl border border-border bg-muted/10 p-6 text-center text-sm text-muted-foreground">
-            No {tab.toLowerCase()} found.
-          </div>
-        )}
+          <TabsContent value="Stores" className="space-y-4">
+            <div className="rounded-lg border border-border bg-background/80 overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12"></TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Join Date</TableHead>
+                    <TableHead className="text-right">Orders</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
 
-        <Sheet open={isSheetOpen} onOpenChange={(open) => setIsSheetOpen(open)}>
-          <SheetContent side="right" className="w-full max-w-sm">
-            <div className="p-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
+                <TableBody>
+                  {filtered.map((row) => (
+                    <TableRow key={row.id} className="hover:bg-muted/10">
+                      <TableCell>
+                        <Avatar className="size-8">
+                          <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                            {row.avatar}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TableCell>
+
+                      <TableCell>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {row.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {row.handle}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="text-sm text-foreground">
+                        {row.email}
+                      </TableCell>
+                      <TableCell className="text-sm text-foreground">
+                        {row.joined}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className="text-sm font-medium text-foreground">
+                          {row.orders}
+                        </span>
+                      </TableCell>
+
+                      <TableCell>
+                        <StatusBadge status={row.status} />
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-primary hover:bg-primary/10"
+                          onClick={() => {
+                            setSelectedRow(row)
+                            setIsSheetOpen(true)
+                          }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {filtered.length === 0 && (
+              <div className="rounded-lg border border-border bg-muted/10 p-8 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No stores found.
+                </p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="Resellers" className="space-y-4">
+            <div className="rounded-lg border border-border bg-background/80 overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12"></TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Join Date</TableHead>
+                    <TableHead className="text-right">Orders</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {filtered.map((row) => (
+                    <TableRow key={row.id} className="hover:bg-muted/10">
+                      <TableCell>
+                        <Avatar className="size-8">
+                          <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                            {row.avatar}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TableCell>
+
+                      <TableCell>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {row.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {row.handle}
+                          </p>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="text-sm text-foreground">
+                        {row.email}
+                      </TableCell>
+                      <TableCell className="text-sm text-foreground">
+                        {row.joined}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <span className="text-sm font-medium text-foreground">
+                          {row.orders}
+                        </span>
+                      </TableCell>
+
+                      <TableCell>
+                        <StatusBadge status={row.status} />
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-primary hover:bg-primary/10"
+                          onClick={() => {
+                            setSelectedRow(row)
+                            setIsSheetOpen(true)
+                          }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {filtered.length === 0 && (
+              <div className="rounded-lg border border-border bg-muted/10 p-8 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No resellers found.
+                </p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetContent side="right" className="w-full max-w-sm p-0">
+            <SheetHeader className="border-b border-border px-6 py-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold text-foreground">
                     {selectedRow?.name ?? 'User details'}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-1">
                     {selectedRow?.handle}
                   </p>
                 </div>
+                <button
+                  onClick={() => setIsSheetOpen(false)}
+                  className="rounded-md hover:bg-muted p-1 transition-colors"
+                >
+                  <X className="size-4 text-muted-foreground" />
+                </button>
               </div>
+            </SheetHeader>
 
-              {selectedRow && (
-                <div className="mt-6 flex flex-col items-center gap-4">
-                  <div className="h-20 w-20 flex items-center justify-center rounded-full bg-primary/10 text-primary text-xl font-semibold">
+            {selectedRow && (
+              <div className="flex flex-col items-center gap-4 p-6">
+                <Avatar className="size-20">
+                  <AvatarFallback className="bg-primary/10 text-primary text-2xl font-semibold">
                     {selectedRow.avatar}
-                  </div>
+                  </AvatarFallback>
+                </Avatar>
 
-                  <div className="text-center">
-                    <p className="text-sm font-medium text-foreground">
-                      {selectedRow.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {selectedRow.handle}
-                    </p>
-                  </div>
-
-                  <div className="w-full mt-4 space-y-3 px-2">
-                    <Button className="w-full rounded-lg border border-amber-200 bg-amber-50 text-amber-700">
-                      Warn User
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      className="w-full rounded-lg border border-rose-200 text-rose-600"
-                    >
-                      Suspend Account
-                    </Button>
-
-                    <Button className="w-full rounded-lg bg-rose-500 text-white">
-                      Ban Account
-                    </Button>
-
-                    <Button
-                      variant="ghost"
-                      className="w-full rounded-lg border border-border text-muted-foreground"
-                    >
-                      Send Notification
-                    </Button>
-                  </div>
+                <div className="text-center">
+                  <p className="text-base font-semibold text-foreground">
+                    {selectedRow.name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {selectedRow.handle}
+                  </p>
                 </div>
-              )}
-            </div>
+
+                <div className="w-full space-y-3 pt-4 border-t border-border">
+                  <Button className="w-full rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100">
+                    Warn User
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-lg border border-orange-200 text-orange-600 hover:bg-orange-50"
+                  >
+                    Suspend Account
+                  </Button>
+
+                  <Button className="w-full rounded-lg bg-red-500 text-white hover:bg-red-600">
+                    Ban Account
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-lg border border-border text-muted-foreground hover:bg-muted"
+                  >
+                    Send Notification
+                  </Button>
+                </div>
+              </div>
+            )}
           </SheetContent>
         </Sheet>
       </section>

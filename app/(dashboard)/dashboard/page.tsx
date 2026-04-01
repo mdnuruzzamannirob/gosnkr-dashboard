@@ -1,7 +1,6 @@
-'use client'
+﻿'use client'
 
 import {
-  ArrowUpRight,
   BadgeAlert,
   CircleDollarSign,
   Flag,
@@ -21,7 +20,6 @@ import {
   YAxis,
 } from 'recharts'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -31,6 +29,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { StatusBadge } from '@/components/ui/status-badge'
 import {
   Table,
   TableBody,
@@ -40,7 +39,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-type MetricCard = {
+interface MetricCard {
   title: string
   value: string
   delta: string
@@ -68,8 +67,8 @@ const metricCards: MetricCard[] = [
   },
   {
     title: 'Platform Uptime',
-    value: '99.98%',
-    delta: 'Only 8 minutes down this month',
+    value: '$2.1M',
+    delta: '+12 h last month',
     icon: TrendingUp,
     bars: [70, 72, 68, 76, 80, 84, 90],
     accent: 'text-amber-600',
@@ -77,7 +76,7 @@ const metricCards: MetricCard[] = [
   {
     title: 'Pending Actions',
     value: '23',
-    delta: 'Store approvals + fraud checks',
+    delta: '8 reseller approvals',
     icon: BadgeAlert,
     bars: [16, 20, 18, 22, 26, 31, 28],
     accent: 'text-rose-600',
@@ -94,16 +93,12 @@ const revenueData = [
 ]
 
 const platformHealth = [
-  { label: 'API Server', value: 99, tone: 'Live', status: '99.9% uptime' },
-  { label: 'Inventory Sync', value: 92, tone: 'Live', status: '98.3% uptime' },
-  { label: 'Payment Gateway', value: 100, tone: 'Live', status: '100% uptime' },
-  {
-    label: 'Push Notifications',
-    value: 88,
-    tone: 'Live',
-    status: '97.4% uptime',
-  },
-  { label: 'Map Services', value: 95, tone: 'Live', status: '99.1% uptime' },
+  { label: 'API Server', value: 99, status: '99.9% uptime' },
+  { label: 'Inventory Sync', value: 92, status: '98.3% uptime' },
+  { label: 'Payment Gateway', value: 100, status: '100% uptime' },
+  { label: 'Push Notifications', value: 88, status: '97.4% uptime' },
+  { label: 'Map Services', value: 95, status: '99.1% uptime' },
+  { label: 'Manage Services', value: 96, status: '98.8% uptime' },
 ]
 
 const storeRows = [
@@ -155,6 +150,7 @@ const actionRows = [
   { label: 'Open disputes', count: 4, icon: ShieldAlert },
   { label: 'Fraud alerts', count: 3, icon: Flag },
   { label: 'Drop approvals', count: 2, icon: BadgeAlert },
+  { label: 'Flagged content', count: 1, icon: BadgeAlert },
 ]
 
 const activityRows = [
@@ -199,7 +195,7 @@ function MetricCardItem({ card }: { card: MetricCard }) {
   const Icon = card.icon
 
   return (
-    <Card className="border-border/70 bg-background/95 backdrop-blur">
+    <Card className="border-border/70 bg-background/95">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-3">
           <CardTitle className="text-sm text-muted-foreground">
@@ -231,6 +227,7 @@ function MetricCardItem({ card }: { card: MetricCard }) {
 
 export default function DashboardPage() {
   const [mounted, setMounted] = useState(false)
+  const [period, setPeriod] = useState<'30D' | '90D' | '1Y'>('30D')
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -242,13 +239,13 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 scroll-smooth">
-      <section id="overview" className="space-y-6">
+      <section className="space-y-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h1 className="text-3xl font-semibold tracking-tight text-foreground">
               Dashboard
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+            <p className="mt-2 text-sm text-muted-foreground">
               Tuesday, March 24, 2026
             </p>
           </div>
@@ -256,10 +253,6 @@ export default function DashboardPage() {
           <div className="flex flex-wrap items-center gap-3">
             <Button variant="outline" className="hidden sm:inline-flex">
               Export Report
-            </Button>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <ArrowUpRight className="size-4" />
-              View insights
             </Button>
           </div>
         </div>
@@ -271,11 +264,8 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section
-        id="analytics"
-        className="grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,0.95fr)]"
-      >
-        <Card className="border-border/70 bg-background/95 backdrop-blur">
+      <section className="grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,0.95fr)]">
+        <Card className="border-border/70 bg-background/95">
           <CardHeader className="flex flex-row items-start justify-between gap-4">
             <div>
               <CardTitle>Revenue Overview</CardTitle>
@@ -284,11 +274,36 @@ export default function DashboardPage() {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="rounded-full bg-primary/10 px-2 py-1 text-primary">
+              <button
+                onClick={() => setPeriod('30D')}
+                className={`rounded-full px-2 py-1 transition-colors ${
+                  period === '30D'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
                 30D
-              </span>
-              <span>90D</span>
-              <span>1Y</span>
+              </button>
+              <button
+                onClick={() => setPeriod('90D')}
+                className={`rounded-full px-2 py-1 transition-colors ${
+                  period === '90D'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                90D
+              </button>
+              <button
+                onClick={() => setPeriod('1Y')}
+                className={`rounded-full px-2 py-1 transition-colors ${
+                  period === '1Y'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                1Y
+              </button>
             </div>
           </CardHeader>
           <CardContent>
@@ -347,7 +362,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-border/70 bg-background/95 backdrop-blur">
+        <Card className="border-border/70 bg-background/95">
           <CardHeader>
             <CardTitle>Platform Health</CardTitle>
             <CardDescription>
@@ -366,9 +381,7 @@ export default function DashboardPage() {
                       {service.status}
                     </p>
                   </div>
-                  <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                    {service.tone}
-                  </Badge>
+                  <StatusBadge status="active">Live</StatusBadge>
                 </div>
                 <Progress value={service.value} className="h-2" />
               </div>
@@ -377,11 +390,8 @@ export default function DashboardPage() {
         </Card>
       </section>
 
-      <section
-        id="stores"
-        className="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,0.85fr)]"
-      >
-        <Card className="border-border/70 bg-background/95 backdrop-blur">
+      <section className="grid gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(0,0.85fr)]">
+        <Card className="border-border/70 bg-background/95">
           <CardHeader>
             <CardTitle>Top 5 Stores This Month</CardTitle>
             <CardDescription>
@@ -477,7 +487,7 @@ export default function DashboardPage() {
       </section>
 
       <section id="activity">
-        <Card className="border-border/70 bg-background/95 backdrop-blur">
+        <Card className="border-border/70 bg-background/95">
           <CardHeader className="flex flex-row items-center justify-between gap-4">
             <div>
               <CardTitle>Recent Activity</CardTitle>
@@ -525,57 +535,6 @@ export default function DashboardPage() {
                   ))}
                 </TableBody>
               </Table>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      <section id="settings" className="grid gap-4 md:grid-cols-3">
-        <Card className="border-border/70 bg-background/95 backdrop-blur md:col-span-2">
-          <CardHeader>
-            <CardTitle>Platform Snapshot</CardTitle>
-            <CardDescription>
-              Operational focus for the current admin session.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-3 sm:grid-cols-3">
-            {[
-              { label: 'Revenue growth', value: '+12.4%' },
-              { label: 'Approval queue', value: '23 items' },
-              { label: 'Disputes resolved', value: '91%' },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="rounded-2xl border border-border bg-muted/20 p-4"
-              >
-                <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                  {item.label}
-                </p>
-                <p className="mt-2 text-2xl font-semibold text-foreground">
-                  {item.value}
-                </p>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card className="border-border/70 bg-background/95 backdrop-blur">
-          <CardHeader>
-            <CardTitle>Need Review</CardTitle>
-            <CardDescription>Fast access to critical work.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <div className="flex items-center justify-between rounded-xl border border-border px-3 py-2">
-              <span>Store approvals</span>
-              <span className="font-medium text-foreground">8</span>
-            </div>
-            <div className="flex items-center justify-between rounded-xl border border-border px-3 py-2">
-              <span>Fraud alerts</span>
-              <span className="font-medium text-foreground">3</span>
-            </div>
-            <div className="flex items-center justify-between rounded-xl border border-border px-3 py-2">
-              <span>Open disputes</span>
-              <span className="font-medium text-foreground">4</span>
             </div>
           </CardContent>
         </Card>

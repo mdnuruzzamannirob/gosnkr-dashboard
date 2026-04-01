@@ -2,9 +2,30 @@
  * Dashboard constants and mock data
  */
 
-import { MetricCard } from '@/types'
-import { LayoutDashboard, Store, ShoppingBag, Shield, FileText, DollarSign, Users, Settings } from 'lucide-react'
-import { NavItem } from '@/types'
+import {
+  DollarSign,
+  FileText,
+  LayoutDashboard,
+  Settings,
+  Shield,
+  ShoppingBag,
+  Store,
+  Users,
+} from 'lucide-react'
+
+// Local type definitions
+interface NavItem {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+}
+
+interface MetricCard {
+  title: string
+  value: string
+  change: string
+  trend: 'up' | 'down'
+}
 
 export const NAVIGATION_ITEMS: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -69,9 +90,21 @@ export const TOP_STORES = [
   { name: 'Smart Gadgets', revenue: '$7,650', orders: 128, growth: '+9%' },
 ]
 
-export const STORE_FILTERS = ['All Stores', 'Pending', 'Under Review', 'Approved', 'Rejected'] as const
+export const STORE_FILTERS = [
+  'All Stores',
+  'Pending',
+  'Under Review',
+  'Approved',
+  'Rejected',
+] as const
 
-export const STORE_DETAIL_TABS = ['business', 'documents', 'location', 'social', 'notes'] as const
+export const STORE_DETAIL_TABS = [
+  'business',
+  'documents',
+  'location',
+  'social',
+  'notes',
+] as const
 
-export type StoreFilter = typeof STORE_FILTERS[number]
-export type StoreDetailTab = typeof STORE_DETAIL_TABS[number]
+export type StoreFilter = (typeof STORE_FILTERS)[number]
+export type StoreDetailTab = (typeof STORE_DETAIL_TABS)[number]
