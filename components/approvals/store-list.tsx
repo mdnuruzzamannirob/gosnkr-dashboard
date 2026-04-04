@@ -33,7 +33,7 @@ export default function StoreList({
           </div>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-4">
+        <div className="flex gap-2 whitespace-nowrap overflow-x-auto pb-4">
           <button className="rounded-full bg-emerald-50 px-3 py-1 text-sm text-emerald-700">
             All
           </button>

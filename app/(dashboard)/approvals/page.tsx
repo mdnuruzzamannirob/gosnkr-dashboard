@@ -60,8 +60,8 @@ export default function ApprovalsPage() {
         </div>
 
         <div className="mt-2 grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
-          <aside className="min-h-[60vh]">
-            <Card className="h-full">
+          <aside className="h-fit">
+            <Card className="h-full p-0">
               <StoreList
                 stores={stores}
                 selectedId={selectedId}

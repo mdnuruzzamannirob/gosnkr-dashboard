@@ -5,7 +5,7 @@
 
 'use client'
 
-import { Bell, LogOut, Menu, Search } from 'lucide-react'
+import { Bell, LogOut, Menu, Search, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -113,6 +113,7 @@ export function DashboardHeader({ onMobileMenuClick }: DashboardHeaderProps) {
 
               {/* Menu Items */}
               <DropdownMenuItem onClick={handleProfile}>
+                <User className="size-4 mr-2" />
                 Profile
               </DropdownMenuItem>
 

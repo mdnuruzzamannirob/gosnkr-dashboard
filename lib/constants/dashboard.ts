@@ -3,14 +3,14 @@
  */
 
 import {
-  DollarSign,
-  FileText,
+  BarChart3,
+  Flag,
   LayoutDashboard,
-  Settings,
-  Shield,
-  ShoppingBag,
+  PackageCheck,
+  ShieldAlert,
   Store,
   Users,
+  Wallet,
 } from 'lucide-react'
 
 // Local type definitions
@@ -27,17 +27,16 @@ interface MetricCard {
   trend: 'up' | 'down'
 }
 
-export const NAVIGATION_ITEMS: NavItem[] = [
+export const NAV_ITEMS: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/stores', label: 'Users & Stores', icon: Store },
-  { href: '/approvals', label: 'Approvals', icon: ShoppingBag },
-  { href: '/risk', label: 'Risk & Verification', icon: Shield },
-  { href: '/drops', label: 'Drops', icon: FileText },
-  { href: '/analytics', label: 'Analytics', icon: DollarSign },
-  { href: '/payments', label: 'Payments', icon: DollarSign },
-  { href: '/disputes', label: 'Disputes', icon: FileText },
-  { href: '/reseller', label: 'Reseller Platform', icon: Users },
-  { href: '/profile', label: 'Profile', icon: Settings },
+  { href: '/approvals', label: 'Store Approval', icon: Store },
+  { href: '/reseller', label: 'Reseller Hub', icon: Users },
+  { href: '/risk', label: 'Fraud Hub', icon: ShieldAlert },
+  { href: '/payments', label: 'Payments & Payouts', icon: Wallet },
+  { href: '/disputes', label: 'Disputes', icon: Flag },
+  { href: '/drops', label: 'Drop Management', icon: PackageCheck },
+  { href: '/analytics', label: 'Analytics', icon: BarChart3 },
 ]
 
 export const DASHBOARD_METRICS: MetricCard[] = [

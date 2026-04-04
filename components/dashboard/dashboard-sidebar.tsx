@@ -5,41 +5,14 @@
 
 'use client'
 
-import {
-  BarChart3,
-  Flag,
-  LayoutDashboard,
-  LogOut,
-  PackageCheck,
-  ShieldAlert,
-  Store,
-  Users,
-  Wallet,
-} from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
+import { NAV_ITEMS } from '@/lib/constants/dashboard'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
-
-type NavItem = {
-  href: string
-  label: string
-  icon: typeof LayoutDashboard
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/stores', label: 'Users & Stores', icon: Store },
-  { href: '/approvals', label: 'Store Approval', icon: Store },
-  { href: '/reseller', label: 'Reseller Hub', icon: Users },
-  { href: '/risk', label: 'Fraud Hub', icon: ShieldAlert },
-  { href: '/payments', label: 'Payments & Payouts', icon: Wallet },
-  { href: '/disputes', label: 'Disputes', icon: Flag },
-  { href: '/drops', label: 'Drop Management', icon: PackageCheck },
-  { href: '/analytics', label: 'Analytics', icon: BarChart3 },
-]
 
 interface DashboardNavListProps {
   onNavigate?: () => void
@@ -60,14 +33,14 @@ function DashboardNavList({ onNavigate }: DashboardNavListProps) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+              'flex items-center whitespace-nowrap gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
               isActive
                 ? 'bg-primary text-primary-foreground'
                 : 'text-white/70 hover:bg-white/10 hover:text-white',
             )}
           >
-            <item.icon className="size-4 shrink-0" />
-            <span>{item.label}</span>
+            <item.icon className="size-4 shrink-0 flex-none" />
+            <span className="flex-1">{item.label}</span>
           </Link>
         )
       })}
@@ -88,8 +61,8 @@ export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
   }
 
   return (
-    <aside className="sticky top-0 hidden h-screen border-r border-white/10 bg-neutral-950 px-4 py-4 text-white lg:flex lg:flex-col">
-      <div className="flex h-full flex-col rounded-2xl bg-neutral-950 px-1 py-1">
+    <aside className="sticky top-0  hidden h-dvh overflow-y-auto [scrollbar-gutter:stable] border-r border-white/10 bg-neutral-950 p-4 text-white lg:flex lg:flex-col">
+      <div className="flex h-full flex-col rounded-2xl bg-neutral-950">
         {/* Logo / Branding */}
         <div className="flex items-center gap-2 px-3 pb-4 pt-2">
           <p className="text-[15px] font-semibold tracking-tight text-white">

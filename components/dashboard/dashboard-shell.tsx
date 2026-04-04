@@ -15,7 +15,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className="min-h-dvh bg-background lg:grid lg:grid-cols-[14.5rem_minmax(0,1fr)]">
+    <div className="min-h-dvh bg-background lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
       {/* Sidebar */}
       <DashboardSidebar />
 
@@ -25,7 +25,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <DashboardHeader onMobileMenuClick={() => setMobileMenuOpen(true)} />
 
         {/* Page Content */}
-        <main className="flex-1 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+        <main className="flex-1 overflow-y-auto [scrollbar-gutter:stable] px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
           {children}
         </main>
       </div>

@@ -165,7 +165,7 @@ export default function StoresPage() {
     'Customers',
   )
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState<any>(null)
+  const [selectedRow, setSelectedRow] = useState(null)
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -229,7 +229,7 @@ export default function StoresPage() {
               </TabsTrigger>
             </TabsList>
 
-            <div className="relative flex w-full max-w-lg items-center gap-2 md:ml-auto md:w-auto">
+            <div className="relative flex w-full max-w-sm items-center gap-2 md:ml-auto">
               <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
               <Input
                 value={search}
