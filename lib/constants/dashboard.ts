@@ -37,6 +37,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/disputes', label: 'Disputes', icon: Flag },
   { href: '/drops', label: 'Drop Management', icon: PackageCheck },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { href: '/staff', label: 'Staff Management', icon: Users },
 ]
 
 export const DASHBOARD_METRICS: MetricCard[] = [
