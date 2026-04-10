@@ -19,6 +19,45 @@ import {
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+// Type definitions
+type SelectedRow =
+  | {
+      type: 'customer'
+      id: number
+      avatar: string
+      name: string
+      handle: string
+      email: string
+      joined: string
+      orders: number
+      status: 'active' | 'warned'
+    }
+  | {
+      type: 'store'
+      id: number
+      logo: string
+      name: string
+      location: string
+      owner: string
+      products: number
+      revenue: string
+      verified: boolean
+      status: 'active' | 'warned'
+    }
+  | {
+      type: 'reseller'
+      id: number
+      avatar: string
+      name: string
+      handle: string
+      trustScore: number
+      listings: number
+      deals: number
+      badge: 'Standard' | 'Premium' | 'Trusted'
+      status: 'active' | 'warned'
+    }
+  | null
+
 // Customers data
 const customerData = [
   {
@@ -165,7 +204,7 @@ export default function StoresPage() {
     'Customers',
   )
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-  const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRow, setSelectedRow] = useState<SelectedRow>(null)
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -525,7 +564,12 @@ export default function StoresPage() {
                     {selectedRow?.name ?? 'Details'}
                   </h2>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {selectedRow?.handle || selectedRow?.email}
+                    {selectedRow &&
+                      (selectedRow.type === 'customer'
+                        ? selectedRow.email
+                        : selectedRow.type === 'store'
+                          ? selectedRow.owner
+                          : selectedRow.handle)}
                   </p>
                 </div>
                 <button
@@ -556,9 +600,13 @@ export default function StoresPage() {
                     {selectedRow.name}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {selectedRow.handle ||
-                      selectedRow.location ||
-                      selectedRow.owner}
+                    {selectedRow.type === 'customer'
+                      ? selectedRow.handle
+                      : selectedRow.type === 'store'
+                        ? selectedRow.location
+                        : selectedRow.type === 'reseller'
+                          ? selectedRow.handle
+                          : ''}
                   </p>
                 </div>
 
